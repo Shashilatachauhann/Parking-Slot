@@ -1,111 +1,125 @@
-import { Clapperboard } from "lucide-react";
+import AuthLayout from "../components/AuthLayout";
 
-function Dashboard() {
+export default function Dashboard() {
+
+  const username =
+    localStorage.getItem("username") || "Shashi";
+
   return (
-    <div className="bg-white min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 py-35">
 
-        <h1 className="text-4xl font-bold text-[#8B1E3F]">
-          Welcome Back 
+    <AuthLayout>
+
+      {/* Heading */}
+
+      <div>
+
+        <h1 className="text-4xl font-bold">
+
+          Welcome Back,
+
+          <span className="text-[#8B1E3F] ml-2">
+
+            {username} 👋
+
+          </span>
+
         </h1>
 
-        <p className="mt-3 text-gray-600">
-          Manage your parking reservations and find available parking slots.
+        <p className="text-gray-500 mt-2">
+
+          Here's what's happening today.
+
         </p>
 
-        <div className="grid gap-6 md:grid-cols-3 mt-10">
+      </div>
 
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#8B1E3F] mb-2">
-              Active Reservation
-            </h2>
 
-            <p className="text-3xl font-bold text-black">
-              1
-            </p>
 
-            <p className="text-gray-600 mt-2">
-              Current Booking
-            </p>
-          </div>
+      {/* Stats Cards */}
 
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#8B1E3F] mb-2">
-              Available Slots
-            </h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
-            <p className="text-3xl font-bold text-black">
-              20
-            </p>
 
-            <p className="text-gray-600 mt-2">
-              Nearby Parking
-            </p>
-          </div>
+        <div className="bg-white rounded-3xl p-6 shadow-sm">
 
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#8B1E3F] mb-2">
-              Total Reservations
-            </h2>
+          <h3 className="text-gray-500">
 
-            <p className="text-3xl font-bold text-black">
-              12
-            </p>
+            Available Slots
 
-            <p className="text-gray-600 mt-2">
-              This Month
-            </p>
-          </div>
+          </h3>
 
-        </div>
+          <p className="mt-2 text-4xl font-bold text-[#8B1E3F]">
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm mt-10">
+            24
 
-          <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-4">
-            Current Reservation
-          </h2>
-
-          <p className="text-black">
-            <strong>Location:</strong> Downtown Plaza
-          </p>
-
-          <p className="text-black mt-2">
-            <strong>Time:</strong> 2:00 PM - 5:00 PM
-          </p>
-
-          <p className="text-green-600 mt-3 font-medium">
-            Confirmed
           </p>
 
         </div>
 
-        <div className="mt-10">
 
-          <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-5">
-            Quick Actions
-          </h2>
 
-          <div className="flex flex-wrap gap-4">
+        <div className="bg-white rounded-3xl p-6 shadow-sm">
 
-            <button className="px-6 py-3 rounded-lg border border-[#8B1E3F] text-[#8B1E3F]">
-              Reserve Spot
-            </button>
+          <h3 className="text-gray-500">
 
-            <button className="px-6 py-3 rounded-lg border border-[#8B1E3F] text-[#8B1E3F]">
-              View Reservations
-            </button>
+            Today's Bookings
 
-            <button className="px-6 py-3 rounded-lg border border-[#8B1E3F] text-[#8B1E3F]">
-              Find Parking
-            </button>
+          </h3>
 
-          </div>
+          <p className="mt-2 text-4xl font-bold text-[#8B1E3F]">
+
+            5
+
+          </p>
 
         </div>
 
-      </main>
-    </div>
+
+
+        <div className="bg-white rounded-3xl p-6 shadow-sm">
+
+          <h3 className="text-gray-500">
+
+            Reservations
+
+          </h3>
+
+          <p className="mt-2 text-4xl font-bold text-[#8B1E3F]">
+
+            2
+
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      {/* Recent Reservations */}
+
+      <div className="bg-white rounded-3xl p-6 shadow-sm mt-10">
+
+        <h2 className="text-xl font-semibold">
+
+          Recent Reservations
+
+        </h2>
+
+
+        <p className="text-gray-500 mt-4">
+
+          No reservations found.
+
+        </p>
+
+
+      </div>
+
+
+    </AuthLayout>
+
   );
-}
 
-export default Dashboard;
+}

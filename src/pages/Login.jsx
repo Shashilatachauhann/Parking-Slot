@@ -2,58 +2,72 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const navigate = useNavigate();
 
-    console.log(email, password);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!email || !password) {
+            setError("All fields are required");
+            return;
+        }
 
-    navigate("/dashboard");
-  };
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            setError("Enter valid email");
+            return;
 
-  return (
-    <div className="p-10 max-w-md mx-auto mt-50 border border-gray-300 shadow-2xl rounded-lg">
+        }
 
-      <h1 className="text-2xl text-center font-bold text-[#8B1E3F] mb-6">
-        Login
-      </h1>
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters");
+            return;
 
-      <label className="block text-lg font-medium text-[#7e0707] mb-2">Email</label>
-      <input
-        type="email"
-        placeholder="Enter Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full border p-2 mb-4 rounded"
-      />
+        }
 
-      <label className="block text-lg font-medium text-[#7e0707] mb-2">Password</label>
-      <input
-        type="password"
-        placeholder="Enter Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full border p-2 mb-4 rounded"
-      />
+        setError("");
 
-         <button
-        onClick={handleSubmit}
-        className="w-full bg-[#8B1E3F] text-white p-2 rounded hover:bg-[#710229] cursor-pointer"
-      >
-        Login
-      </button>
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("role", "user");
+        // Temporary Username
+        localStorage.setItem("username", "Shashi");
 
-      <p className="mt-4 text-center text-gray-600">
-        Don't have account?{" "}
-        <Link to="/signup" className="text-[#8B1E3F] font-semibold cursor-pointer">
-          Sign Up
-        </Link>
-      </p>
+        navigate("/dashboard");
 
-    </div>
-  );
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] px-4">
+            <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl border border-[#8B1E3F]/10">
+                <h1 className="text-3xl font-bold text-center text-[#8B1E3F]">Login</h1>
+                <p className="text-center text-gray-500 mt-2">Welcome Back</p>
+                <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                    <div>
+                        <label className="block mb-2 font-medium">Email</label>
+                        <input type="email" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)}
+                            className="w-full rounded-xl border p-3 outline-none focus:border-[#8B1E3F]" />
+                    </div>
+
+                    <div>
+                        <label className="block mb-2 font-medium">Password</label>
+                        <input type="password" placeholder="Enter Password" value={password} onChange={(e) => setPassword(e.target.value)}
+                            className="w-full rounded-xl border p-3 outline-none focus:border-[#8B1E3F]" />
+                    </div>
+
+                    {error && (
+                        <p className="text-red-500 text-sm">{error}</p>
+                    )}
+
+                    <button type="submit" className=" w-full rounded-xlbg-[#8B1E3F] py-3 font-semibold text-white transition hover:bg-[#A61E4D]">Login</button>
+                </form>
+                <p className="mt-5 text-center text-gray-500">Don't have an account?
+                    <Link to="/signup" className="ml-2 font-semibold text-[#8B1E3F]">Sign Up</Link>
+                </p>
+            </div>
+        </div>
+    );
 }
