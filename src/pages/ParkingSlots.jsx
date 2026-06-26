@@ -1,80 +1,60 @@
-import { Car } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function ParkingSlots() {
-  const slots = [
-    { id: "A1", status: "available" },
-    { id: "A2", status: "occupied" },
-    { id: "A3", status: "reserved" },
-    { id: "A4", status: "available" },
+export default function ParkingSlots() {
+  const navigate = useNavigate();
 
-    { id: "B1", status: "occupied" },
-    { id: "B2", status: "available" },
-    { id: "B3", status: "available" },
-    { id: "B4", status: "reserved" },
+  const [slots, setSlots] = useState([
+    { id: "A1", location: "Lucknow Central", price: 50, status: "Available" },
+    { id: "A2", location: "Lucknow Central", price: 50, status: "Available" },
+    { id: "B4", location: "Hazratganj Hub", price: 80, status: "Available" },
+  ]);
 
-    { id: "C1", status: "occupied" },
-    { id: "C2", status: "available" },
-    { id: "C3", status: "available" },
-    { id: "C4", status: "reserved" },
-  ];
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("parkingSlots") || "[]");
+    if (savedData.length > 0) {
+      setSlots(savedData);
+    }
+  }, []);
+
+  const handleBook = (slot) => {
+    const newReservation = {
+      id: "RES-" + Math.floor(Math.random() * 10000),
+      location: slot.location,
+      slot: slot.id,
+      date: new Date().toLocaleDateString(),
+      time: "Available Now",
+      status: "Active",
+      amount: "₹" + slot.price
+    };
+
+    const existing = JSON.parse(localStorage.getItem("reservations") || "[]");
+    localStorage.setItem("reservations", JSON.stringify([...existing, newReservation]));
+
+    alert("✅ Slot " + slot.id + " successfully booked!");
+    navigate("/reservations");
+  };
 
   return (
-    <div className="bg-white min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 py-12 my-16">
+    <div className="w-full">
+      <h1 className="text-3xl font-bold mb-8">Available Parking Slots</h1>
+      <div className="grid md:grid-cols-3 gap-6">
+        {slots.map((slot) => (
+          <div key={slot.id} className="bg-white p-6 rounded-3xl border shadow-sm">
+            <h3 className="text-xl font-bold">Slot {slot.name}</h3>
 
-        <h1 className="text-4xl font-bold text-[#8B1E3F]">
-          Parking Slots
-        </h1>
+            <p className="text-gray-500">{slot.location}</p>
+            <p className="text-2xl font-bold text-[#8B1E3F] my-4">{slot.price}</p>
 
-        <p className="mt-3 text-gray-600">
-          Choose and reserve your preferred parking spot.
-        </p>
-
-        <div className="grid gap-6 md:grid-cols-4 mt-10">
-
-          {slots.map((slot) => (
-            <div
-              key={slot.id}
-              className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm shadow-red-950"
+            <button
+              onClick={() => handleBook(slot)}
+              className="w-full bg-[#8B1E3F] text-white py-3 rounded-xl font-bold hover:bg-[#A61E4D]"
             >
-              <div className="flex justify-center mb-4">
-                <Car size={40} className="text-[#8B1E3F]" />
-              </div>
-
-              <h2 className="text-xl font-semibold text-center text-black">
-                {slot.id}
-              </h2>
-
-              <p className="text-center text-gray-600 mt-2">
-                Parking Slot
-              </p>
-
-              <div className="text-center mt-4">
-                <span
-                  className={`px-3 py-1 rounded text-sm ${
-                    slot.status === "available"
-                      ? "bg-green-100 text-green-700"
-                      : slot.status === "occupied"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {slot.status}
-                </span>
-              </div>
-
-              <button
-                className="w-full mt-5 bg-[#8B1E3F] text-white py-2 rounded hover:bg-[#4a0404]"
-              >
-                Reserve Spot
-              </button>
-            </div>
-          ))}
-
-        </div>
-
-      </main>
+              Book Now
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
-export default ParkingSlots;

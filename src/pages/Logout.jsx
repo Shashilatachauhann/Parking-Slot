@@ -5,7 +5,6 @@ export default function Logout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Clear auth state and redirect immediately to home
     localStorage.setItem("isLoggedIn", "false");
     localStorage.removeItem("username");
     localStorage.removeItem("role");

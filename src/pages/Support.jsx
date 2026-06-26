@@ -1,157 +1,73 @@
+import { useState } from "react";
+import { Mail, Phone, MessageSquare, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+
 export default function Support() {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const faqs = [
+    { q: "How do I cancel my reservation?", a: "Go to your 'Reservations' tab, select the active booking, and click 'Cancel Booking'. The refund will be credited to your wallet instantly." },
+    { q: "How do I add money to my wallet?", a: "Navigate to the Dashboard, click on '+ Add Money' button, select your payment method, and complete the transaction." },
+    { q: "What if I can't find my reserved slot?", a: "Please contact our on-site support team via the 'Call Support' button below or check the parking hub number in your ticket." }
+  ];
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
+    <div className="w-full max-w-4xl mx-auto pb-12">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-extrabold text-gray-900">How can we help you?</h1>
+        <p className="text-gray-500 mt-2">Find answers, get support, or contact us directly.</p>
+      </div>
 
-      {/* Heading */}
-      <h1 className="text-4xl font-bold text-[#8B1E3F] text-center">
-        Support Center
-      </h1>
-
-      <p className="text-center text-gray-600 mt-3">
-        We're here to help you with parking reservations and support.
-      </p>
-
-      {/* Contact Form */}
-      <section className="mt-12 border rounded-lg p-6 shadow-sm">
-
-        <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-5">
-          Contact Us
-        </h2>
-
-        <form className="space-y-4">
-
-          <input
-            type="text"
-            placeholder="Your Name"
-            className="w-full border rounded-lg p-3"
-          />
-
-          <input
-            type="email"
-            placeholder="Your Email"
-            className="w-full border rounded-lg p-3"
-          />
-
-          <textarea
-            rows="4"
-            placeholder="Your Message"
-            className="w-full border rounded-lg p-3"
-          ></textarea>
-
-          <button
-            className="bg-[#8B1E3F] text-white px-6 py-3 rounded-lg"
-          >
-            Send Message
-          </button>
-
-        </form>
-
-      </section>
-
-      {/* Contact Details */}
-      <section className="mt-10 border rounded-lg p-6 shadow-sm">
-
-        <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-5">
-          Contact Details
-        </h2>
-
-        <p className="text-gray-700 mb-3">
-          📞 Phone: +91 98765 43210
-        </p>
-
-        <p className="text-gray-700">
-          📧 Email: support@parkmate.com
-        </p>
-
-      </section>
-
-      {/* Parking Rules */}
-      <section className="mt-10 border rounded-lg p-6 shadow-sm">
-
-        <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-5">
-          Parking Rules
-        </h2>
-
-        <ul className="list-disc pl-6 text-gray-700 space-y-2">
-
-          <li>Park only in your reserved slot.</li>
-
-          <li>Follow parking time limits.</li>
-
-          <li>Do not block other vehicles.</li>
-
-          <li>Keep your parking ticket safe.</li>
-
-          <li>Drive carefully inside the parking area.</li>
-
-        </ul>
-
-      </section>
-
-      {/* Help & Support */}
-      <section className="mt-10 border rounded-lg p-6 shadow-sm">
-
-        <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-5">
-          Help & Support
-        </h2>
-
-        <div className="space-y-3 text-gray-700">
-
-          <p>✔ Book parking slots online.</p>
-
-          <p>✔ Manage your reservations easily.</p>
-
-          <p>✔ Check slot availability in real time.</p>
-
-          <p>✔ Get assistance for booking issues.</p>
-
-        </div>
-
-      </section>
-
-      {/* FAQs */}
-      <section className="mt-10 border rounded-lg p-6 shadow-sm mb-10">
-
-        <h2 className="text-2xl font-semibold text-[#8B1E3F] mb-5">
-          Frequently Asked Questions
-        </h2>
-
+      <div className="grid md:grid-cols-2 gap-8">
+        
         <div className="space-y-4">
-
-          <div>
-            <h3 className="font-semibold text-black">
-              How do I reserve a parking slot?
-            </h3>
-
-            <p className="text-gray-600">
-              Go to Parking Slots and choose an available slot.
-            </p>
+          <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4 hover:border-[#8B1E3F]/30 transition-colors cursor-pointer">
+            <div className="bg-[#8B1E3F]/10 p-3 rounded-xl text-[#8B1E3F]"><Phone /></div>
+            <div>
+              <p className="font-bold text-gray-900">Call Support</p>
+              <p className="text-sm text-gray-500">+91 98765 43210</p>
+            </div>
           </div>
-
-          <div>
-            <h3 className="font-semibold text-black">
-              Can I cancel my reservation?
-            </h3>
-
-            <p className="text-gray-600">
-              Yes, reservations can be cancelled before the booking time.
-            </p>
+          
+          <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4 hover:border-[#8B1E3F]/30 transition-colors cursor-pointer">
+            <div className="bg-[#8B1E3F]/10 p-3 rounded-xl text-[#8B1E3F]"><Mail /></div>
+            <div>
+              <p className="font-bold text-gray-900">Email Us</p>
+              <p className="text-sm text-gray-500">support@parkmate.com</p>
+            </div>
           </div>
-
-          <div>
-            <h3 className="font-semibold text-black">
-              How can I contact support?
-            </h3>
-
-            <p className="text-gray-600">
-              You can use the contact form or call our support team.
-            </p>
-          </div>
-
         </div>
 
-      </section>
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+          <h2 className="font-bold text-lg mb-4 flex items-center gap-2"><HelpCircle size={20}/> Frequently Asked Questions</h2>
+          <div className="space-y-3">
+            {faqs.map((faq, index) => (
+              <div key={index} className="border border-gray-100 rounded-2xl overflow-hidden">
+                <button 
+                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  className="w-full flex justify-between items-center p-4 bg-gray-50 text-left font-semibold text-sm"
+                >
+                  {faq.q}
+                  {openIndex === index ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}
+                </button>
+                {openIndex === index && (
+                  <div className="p-4 text-sm text-gray-600 bg-white border-t border-gray-100">{faq.a}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
+      <div className="mt-8 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+        <h2 className="font-bold text-xl mb-6">Send us a message</h2>
+        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Message sent successfully!"); }}>
+          <textarea 
+            placeholder="Describe your issue..." 
+            className="w-full h-32 p-4 bg-gray-50 rounded-2xl border border-gray-200 outline-none focus:ring-2 focus:ring-[#8B1E3F]/20"
+          ></textarea>
+          <button className="bg-[#8B1E3F] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#A61E4D]">Submit Ticket</button>
+        </form>
+      </div>
     </div>
   );
 }
