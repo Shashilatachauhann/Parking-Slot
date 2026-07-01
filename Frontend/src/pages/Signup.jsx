@@ -9,37 +9,42 @@ export default function Signup() {
 
   const handleSignup = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.password) return setError("All fields are required");
-    if (formData.password.length < 6) return setError("Password must be at least 6 characters");
-
-    localStorage.setItem("username", formData.name);
-    localStorage.setItem("role", formData.role);
     
-    alert(`Welcome, ${formData.name}! Account created.`);
-    navigate(formData.role === "admin" ? "/admin-dashboard" : "/dashboard");
+    // Validation
+    if (!formData.name || !formData.email || !formData.password) {
+      return setError("All fields are required");
+    }
+    if (formData.password.length < 6) {
+      return setError("Password must be at least 6 characters");
+    }
+
+    // Save to LocalStorage (Isse tumhara App.jsx ka useEffect trigger hoga)
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", formData.name);
+    localStorage.setItem("userRole", formData.role); 
+    
+    // Refresh to update state in App.jsx
+    window.location.href = formData.role === "admin" ? "/admindashboard" : "/dashboard";
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F8F8FA] p-6">
       <div className="w-full max-w-lg bg-white p-10 rounded-[40px] shadow-2xl border border-gray-100">
         
-                <div className="flex flex-col items-center justify-center mb-8">
-                    <Link to="/" className="flex items-center gap-3 transition-transform hover:scale-105">
-                        <span className="border-[3px] border-[#550206] rounded-xl px-3 py-1 text-2xl font-bold text-[#550206]">
-                            P
-                        </span>
-                        <div className="text-left">
-                            <h1 className="text-2xl font-bold text-[#550206] leading-tight"> ParkMate </h1>
-                            <p className="text-[11px] tracking-[4px] text-gray-500">SMART PARK</p>
-                        </div>
-                    </Link>
-                    <p className="text-gray-500 mt-5 font-medium text-center">
-                        Create your account and start parking smarter.
-                    </p>
-                </div>
+        {/* Header */}
+        <div className="flex flex-col items-center justify-center mb-8">
+          <Link to="/" className="flex items-center gap-3 transition-transform hover:scale-105">
+            <span className="border-[3px] border-[#8B1E3F] rounded-xl px-3 py-1 text-2xl font-bold text-[#8B1E3F]">P</span>
+            <div className="text-left">
+              <h1 className="text-2xl font-bold text-[#8B1E3F] leading-tight">ParkMate</h1>
+              <p className="text-[11px] tracking-[4px] text-gray-500">SMART PARK</p>
+            </div>
+          </Link>
+          <p className="text-gray-500 mt-5 font-medium text-center">Create your account and start parking smarter.</p>
+        </div>
 
+        {/* Form */}
         <form onSubmit={handleSignup} className="space-y-5">
-          {/* Input Fields with Icons */}
           <div className="relative">
             <User className="absolute left-4 top-4 text-gray-400" size={20} />
             <input placeholder="Full Name" className="w-full rounded-2xl border-2 border-gray-100 p-4 pl-12 outline-none focus:border-[#8B1E3F] transition-all" onChange={(e) => setFormData({...formData, name: e.target.value})} />
@@ -71,7 +76,7 @@ export default function Signup() {
         </form>
 
         <p className="mt-8 text-center text-gray-500 font-medium">
-          Already have an account? <Link to="/login" className="text-[#8B1E3F] text-1xl hover:underline">Login here</Link>
+          Already have an account? <Link to="/login" className="text-[#8B1E3F] hover:underline">Login here</Link>
         </p>
       </div>
     </div>

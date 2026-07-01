@@ -33,7 +33,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm px-6 lg:px-10 py-4">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#550206] shadow-sm shadow-[#410103] px-6 lg:px-10 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         <Link to="/" className="flex items-center gap-3">

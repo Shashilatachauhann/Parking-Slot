@@ -16,6 +16,8 @@ import Profile from "./pages/Profile.jsx";
 import AboutUs from "./pages/AboutUs";
 import FindParking from "./pages/FindParking.jsx";
 import ManageSlots from "./pages/ManageSlots.jsx";
+import Bookings from "./pages/Bookings.jsx";
+import UsersPage from "./pages/UsersPage.jsx";
 function App() {
   const location = useLocation();
 
@@ -79,6 +81,8 @@ function App() {
                 <Route path="/" element={<Navigate to="/admindashboard" replace />} />
                 <Route path="*" element={<Navigate to="/admindashboard" replace />} />
                 <Route path="/manageslots" element={<ManageSlots />} />
+                <Route path="/bookings" element={<Bookings />} />
+                <Route path="/users" element={<UsersPage />} />
 
               </>
             )}
