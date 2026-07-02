@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import HowItWorks from "../components/HowItWorks";
 import Footer from "../components/Footer";
 import CarBg from '../assets/CarBg.png';
-
+import threads from '../assets/threads.png';
 const features = [
   {
     icon: "🚗",
@@ -31,7 +31,6 @@ export default function Home() {
     <main className="min-h-screen font-sans overflow-hidden">
 
       <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image with Dark Overlay */}
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${CarBg})` }}
@@ -39,10 +38,10 @@ export default function Home() {
           <div className="absolute inset-0 bg-gray-950/70 backdrop-blur-[2px]"></div>
         </div>
 
-        {/* Main Content Container */}
+    
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 lg:py-28 grid lg:grid-cols-2 items-center gap-16">
 
-          {/* Left Content */}
+       
           <div className="text-white">
             <span className="inline-block px-4 py-1.5 rounded-full bg-[#8B1E3F]/50 text-white border border-[#8B1E3F] text-sm font-semibold tracking-wide mb-6">
               ✨ Smart Parking Platform
@@ -68,7 +67,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Side Card (Glassmorphism) */}
+    
           <div className="relative flex justify-center lg:justify-end">
             <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-4xl p-8 shadow-2xl border border-white/20">
               <div className="flex justify-between items-start mb-8">

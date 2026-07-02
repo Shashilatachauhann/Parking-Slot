@@ -1,26 +1,25 @@
+import threads from '../assets/threads.png'; // Import image at the top
+
 export default function HowItWorks() {
   const steps = [
-    {
-      icon: "🔍",
-      title: "Search Parking",
-      desc: "Browse available parking spaces near your destination effortlessly."
-    },
-    {
-      icon: "📍",
-      title: "Select Spot",
-      desc: "Choose the perfect slot based on real-time location and timing maps."
-    },
-    {
-      icon: "💳",
-      title: "Book Securely",
-      desc: "Confirm your spot instantly with our encrypted fast payment system."
-    }
+    { icon: "🔍", title: "Search Parking", desc: "Browse available parking spaces near your destination effortlessly." },
+    { icon: "📍", title: "Select Spot", desc: "Choose the perfect slot based on real-time location and timing maps." },
+    { icon: "💳", title: "Book Securely", desc: "Confirm your spot instantly with our encrypted fast payment system." }
   ];
 
   return (
-    <section className="py-24 bg-[#FAFAFA] overflow-hidden border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-6">
-        
+    <section className="relative my-0 py-30 bg-[#FAFAFA] overflow-hidden border-t border-gray-100">
+      
+      <div 
+        className="absolute inset-0 opacity-[0.5] pointer-events-none" 
+        style={{ 
+          backgroundImage: `url(${threads})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Section Heading */}
         <div className="text-center">
           <span className="inline-block bg-[#8B1E3F]/10 text-[#8B1E3F] px-5 py-2 rounded-full font-bold text-xs tracking-wide uppercase">
@@ -34,10 +33,10 @@ export default function HowItWorks() {
           </p>
         </div>
 
-   
+        {/* Steps Grid */}
         <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
-
-          <div className="hidden lg:block absolute top-24 left-[15%] w-[70%] h-0.5 bg-linear-to-r from-transparent via-[#8B1E3F]/20 to-transparent pointer-events-none" />
+          {/* Connector Line */}
+          <div className="hidden lg:block absolute top-24 left-[15%] w-[70%] h-0.5 bg-gradient-to-r from-transparent via-[#8B1E3F]/20 to-transparent pointer-events-none" />
 
           {steps.map((step, index) => (
             <div 
@@ -64,10 +63,8 @@ export default function HowItWorks() {
               <div className="mt-8 h-0.75 rounded-full bg-gray-100 overflow-hidden">
                 <div className="w-0 h-full bg-[#8B1E3F] rounded-full transition-all duration-700 ease-out group-hover:w-full" />
               </div>
-
             </div>
           ))}
-
         </div>
       </div>
     </section>

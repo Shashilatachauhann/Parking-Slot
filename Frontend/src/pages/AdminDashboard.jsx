@@ -21,7 +21,6 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {/* performance cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {[{title: "Revenue", val: "₹45,200", trend: "+12%"}, {title: "Bookings", val: "142", trend: "+5%"}, {title: "Users", val: "1,284", trend: "+2%"}, {title: "Slots", val: "48", trend: "0%"}].map((card, i) => (
           <div key={i} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow">
@@ -32,7 +31,6 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
           <h3 className="text-xl font-bold mb-6">Revenue Overview</h3>
@@ -47,7 +45,6 @@ export default function AdminDashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Bookings Distribution */}
         <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
           <h3 className="text-xl font-bold mb-6">Booking Flow</h3>
           <ResponsiveContainer width="100%" height={300}>

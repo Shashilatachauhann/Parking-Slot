@@ -2,7 +2,6 @@ import { useState } from "react";
 import { User, Shield, ShieldOff, Search, MoreVertical } from "lucide-react";
 
 export default function UsersPage() {
-  // Mock Data: Backend connect karte waqt yahan API call aayegi
   const [users, setUsers] = useState([
     { id: 1, name: "Rahul Kumar", email: "rahul@email.com", bookings: 15, status: "Active" },
     { id: 2, name: "Priya Singh", email: "priya@email.com", bookings: 8, status: "Active" },
@@ -15,7 +14,7 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header Section */}
+     
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-black text-gray-900">System Users</h1>
@@ -27,7 +26,6 @@ export default function UsersPage() {
         </div>
       </div>
 
-      {/* Users Table */}
       <div className="bg-white rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
         <table className="w-full text-left">
           <thead className="bg-gray-50 border-b border-gray-100">

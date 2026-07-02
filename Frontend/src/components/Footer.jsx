@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 
+import { Link } from "react-router-dom";
 export default function Footer() {
   const links = [
     { name: "Home", path: "/" },
@@ -8,7 +8,8 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-100 mt-24">
+    <footer className=" border-t border-gray-100 mt-24">
+
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-12">
           

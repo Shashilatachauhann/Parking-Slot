@@ -5,121 +5,97 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!email || !password) {
-            setError("Please fill in all fields");
-            return;
-            localStorage.setItem("isLoggedIn", "true");
-            const savedName = localStorage.getItem("username") || "User";
-            localStorage.setItem("username", savedName);
-
-            localStorage.setItem("userRole", "user");
-        }
-
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email)) {
-            setError("Please enter a valid email format");
-            return;
-        }
-
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters long");
-            return;
-        }
-
         setError("");
 
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userRole", "user");
-        localStorage.setItem("username", "Shashi");
+        if (!email || !password) return setError("Please fill in all fields");
 
-        alert("✅ Login Successful! Welcome back to ParkMate.");
+        setLoading(true);
 
-        navigate("/dashboard");
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                if (data.user.role !== 'user') {
+                    return setError("Access Denied! Ye User login page hai.");
+                }
+
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("username", data.user.name);
+                localStorage.setItem("userRole", data.user.role);
+
+                alert(`Welcome back, ${data.user.name}!`);
+                navigate("/dashboard");
+            } else {
+                setError(data.message || "Invalid credentials");
+            }
+        } catch (err) {
+            setError("Server se connect nahi ho pa raha hai.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#F8F8FA] px-4 relative overflow-hidden">
 
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#8B1E3F]/10 rounded-full blur-[100px]"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#8B1E3F]/10 rounded-full blur-[100px]"></div>
-
             <div className="w-full max-w-md bg-white/80 backdrop-blur-md rounded-4xl p-10 shadow-2xl border border-gray-100 relative z-10">
-
                 <div className="flex flex-col items-center justify-center mb-8">
                     <Link to="/" className="flex items-center gap-3 transition-transform hover:scale-105">
-                        <span className="border-[3px] border-[#550206] rounded-xl px-3 py-1 text-2xl font-bold text-[#550206]">
-                            P
-                        </span>
+                        <span className="border-[3px] border-[#550206] rounded-xl px-3 py-1 text-2xl font-bold text-[#550206]">P</span>
                         <div className="text-left">
-                            <h1 className="text-2xl font-bold text-[#550206] leading-tight"> ParkMate </h1>
-                            <p className="text-[11px] tracking-[4px] text-gray-500">SMART PARK</p>
+                            <h1 className="text-2xl font-bold text-[#550206] leading-tight">ParkMate</h1>
+                            <p className="text-[11px] tracking-[4px] text-gray-500">USER LOGIN</p>
                         </div>
                     </Link>
-                    <p className="text-gray-500 mt-5 font-medium text-center">
-                        Welcome back! Please login to your account.
-                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-
                     <div>
-                        <label className="block mb-2 text-sm font-semibold text-gray-700">
-                            Email Address
-                        </label>
+                        <label className="block mb-2 text-sm font-semibold text-gray-700">Email</label>
                         <input
                             type="email"
                             placeholder="name@example.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3.5 text-gray-900 outline-none focus:bg-white focus:border-[#8B1E3F] focus:ring-4 focus:ring-[#8B1E3F]/10 transition-all"
+                            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3.5 outline-none focus:bg-white focus:border-[#8B1E3F]"
                         />
                     </div>
-
                     <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <label className="block text-sm font-semibold text-gray-700">
-                                Password
-                            </label>
-                            <Link to="/support" className="text-sm font-bold text-[#8B1E3F] hover:underline">
-                                Forgot password?
-                            </Link>
-                        </div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
                         <input
                             type="password"
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3.5 text-gray-900 outline-none focus:bg-white focus:border-[#8B1E3F] focus:ring-4 focus:ring-[#8B1E3F]/10 transition-all"
+                            className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3.5 outline-none focus:bg-white focus:border-[#8B1E3F]"
                         />
                     </div>
 
-                    {error && (
-                        <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium border border-red-100 flex items-center gap-2">
-                            <span>⚠️</span> {error}
-                        </div>
-                    )}
+                    {error && <p className="text-red-500 text-sm font-bold text-center">⚠️ {error}</p>}
 
                     <button
+                        disabled={loading}
                         type="submit"
-                        className="w-full rounded-xl bg-[#8B1E3F] py-4 mt-2 font-bold text-white shadow-lg shadow-[#8B1E3F]/20 hover:bg-[#A61E4D] transform hover:-translate-y-0.5 transition-all duration-300"
+                        className="w-full rounded-xl bg-[#8B1E3F] py-4 mt-2 font-bold text-white hover:bg-[#A61E4D] transition-all"
                     >
-                        Login
+                        {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>
 
                 <p className="mt-8 text-center text-gray-500 font-medium">
-                    Don't have an account?
-                    <Link to="/signup" className="ml-2  text-[#8B1E3F] hover:underline transition-all">
-                        Create an account
-                    </Link>
+                    New here? <Link to="/signup" className="text-[#8B1E3F] hover:underline">Create an account</Link>
                 </p>
-
             </div>
         </div>
     );

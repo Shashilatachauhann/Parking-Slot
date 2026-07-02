@@ -5,12 +5,11 @@ export default function Bookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    // API Call: fetch('/api/bookings')
     setBookings([{ id: "B1", user: "Amit", slot: "A-01", status: "Active" }]);
   }, []);
 
   const updateStatus = (id, newStatus) => {
-    // API Call: axios.patch(`/api/bookings/${id}`, { status: newStatus })
+ 
     setBookings(bookings.map(b => b.id === id ? { ...b, status: newStatus } : b));
   };
 
