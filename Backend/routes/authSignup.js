@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const users = require('../db'); // Central DB import kiya
+const users = require('../db'); 
 
 router.post('/', (req, res) => {
     const { name, email, password, role } = req.body;
