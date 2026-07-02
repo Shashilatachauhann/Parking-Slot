@@ -1,3 +1,4 @@
-// backend/db.js
-const users = []; // Ye hamara central dummy database hai
+const users = []; 
 module.exports = users;
+const slots = [];
+module.exports = slots;

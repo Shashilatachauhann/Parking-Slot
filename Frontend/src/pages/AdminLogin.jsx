@@ -32,7 +32,7 @@ export default function AdminLogin() {
 
       if (response.ok) {
         if (data.user.role !== 'admin') {
-          setError("Access Denied! Sirf Admins allowed hain.");
+          setError("Access Denied! This is an admin login page.");
           setLoading(false);
           return;
         }
@@ -46,7 +46,7 @@ export default function AdminLogin() {
         setError(data.message || "Invalid Admin Credentials");
       }
     } catch (err) {
-      setError("Server se connect nahi ho pa raha hai.");
+      setError("Could not connect to the server. Please try again later.");
     } finally {
       setLoading(false);
     }

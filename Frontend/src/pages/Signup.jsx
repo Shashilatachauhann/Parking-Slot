@@ -41,7 +41,7 @@ export default function Signup() {
         setError(data.message || "Signup failed");
       }
     } catch (err) {
-      setError("Server se connect nahi ho pa raha hai. Server chalu hai?");
+      setError("Could not connect to the server. Please try again later.");
     } finally {
       setLoading(false);
     }

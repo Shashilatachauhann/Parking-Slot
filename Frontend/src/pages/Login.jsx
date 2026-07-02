@@ -27,7 +27,7 @@ export default function Login() {
 
             if (response.ok) {
                 if (data.user.role !== 'user') {
-                    return setError("Access Denied! Ye User login page hai.");
+                    return setError("Access Denied! it's a user login page.");
                 }
 
                 localStorage.setItem("isLoggedIn", "true");
@@ -40,7 +40,7 @@ export default function Login() {
                 setError(data.message || "Invalid credentials");
             }
         } catch (err) {
-            setError("Server se connect nahi ho pa raha hai.");
+            setError("Could not connect to the server. Please try again later.");
         } finally {
             setLoading(false);
         }

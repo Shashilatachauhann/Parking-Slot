@@ -6,10 +6,12 @@ app.use(cors());
 app.use(express.json());
 const signupRoutes = require('./routes/authSignup');
 const loginRoutes = require('./routes/authLogin');
+const slotRoutes = require('./routes/slots');
 
 
 app.use('/api/auth/signup', signupRoutes);
 app.use('/api/auth/login', loginRoutes);
+app.use('/api/slots', slotRoutes);
 
 app.get('/', (req, res) => {
     res.send("ParkMate Backend is running perfectly!");
