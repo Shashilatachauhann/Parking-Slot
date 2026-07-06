@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const users = require('../db'); 
+const {users} = require('../db'); 
 
 router.post('/', (req, res) => {
     const { email, password } = req.body;

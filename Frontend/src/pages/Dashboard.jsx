@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { useEffect, useState } from "react";
 let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
@@ -16,8 +17,25 @@ export default function Dashboard() {
   const username = localStorage.getItem("username") || "Guest";
   const walletBalance = 450;
 
-  const allReservations = JSON.parse(localStorage.getItem("reservations") || "[]");
-  const activeReservations = allReservations.filter(res => res.status === "Active");
+
+const [bookings, setBookings] = useState([]); 
+
+  useEffect(() => {
+    const loadBookings = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/bookings');
+        const data = await response.json();
+        setBookings(data);
+      } catch (error) {
+        console.error("Error fetching:", error);
+      }
+    };
+
+    loadBookings();
+  }, []);
+  const active = bookings.filter(res => res.status === "Active");
+
+
 
   return (
     <div className="w-full animate-in fade-in duration-500">
@@ -52,11 +70,11 @@ export default function Dashboard() {
 
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
             <h3 className="text-gray-600 font-semibold mb-4">My Active Reservation</h3>
-            {activeReservations.length > 0 ? (
-              activeReservations.map(res => (
+            {active.length > 0 ? (
+              active.map(res => (
                 <div key={res.id} className="bg-[#8B1E3F]/5 rounded-2xl p-5 border border-[#8B1E3F]/10">
                   <p className="font-bold text-[#8B1E3F]">📍 {res.location}</p>
-                  <p className="text-sm text-gray-600 mt-1">🚗 Slot: <span className="font-bold text-gray-900">{res.slot}</span></p>
+                  <p className="text-sm text-gray-600 mt-1">🚗 Slot: <span className="font-bold text-gray-900">{res.slotNumber}</span></p>
                   <p className="text-xs text-gray-400 mt-2 font-medium">{res.time}</p>
                 </div>
               ))
