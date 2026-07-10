@@ -1,4 +1,4 @@
-import threads from '../assets/threads.png'; // Import image at the top
+import threads from '../assets/threads.png'; 
 
 export default function HowItWorks() {
   const steps = [
@@ -36,7 +36,7 @@ export default function HowItWorks() {
         {/* Steps Grid */}
         <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
           {/* Connector Line */}
-          <div className="hidden lg:block absolute top-24 left-[15%] w-[70%] h-0.5 bg-gradient-to-r from-transparent via-[#8B1E3F]/20 to-transparent pointer-events-none" />
+          <div className="hidden lg:block absolute top-24 left-[15%] w-[70%] h-0.5 bg-linear-to-r from-transparent via-[#8B1E3F]/20 to-transparent pointer-events-none" />
 
           {steps.map((step, index) => (
             <div 
