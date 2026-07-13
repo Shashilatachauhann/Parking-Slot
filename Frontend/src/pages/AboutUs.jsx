@@ -22,7 +22,7 @@ export default function AboutUs() {
             { title: "Real-time Tracking", desc: "Know availability before you reach." },
             { title: "Secure Payments", desc: "Safe and encrypted transaction methods." },
             { title: "User Friendly", desc: "Clean interface designed for everyone." },
-            { title: "24/7 Support", desc: "We are always here to help you." }
+            { title: "24/7 Support", desc: "We are always here to help you." } 
           ].map((item, i) => (
             <li key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
               <h3 className="font-bold text-[#8B1E3F]">{item.title}</h3>
