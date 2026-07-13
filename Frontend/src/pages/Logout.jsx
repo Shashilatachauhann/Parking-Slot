@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Logout() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    localStorage.setItem("isLoggedIn", "false");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
+    logout();
     navigate("/", { replace: true });
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] px-4">

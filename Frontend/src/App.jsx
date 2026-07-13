@@ -1,7 +1,6 @@
-﻿import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+﻿import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
-import AuthLayout from "./components/AuthLayout"; 
+import AuthLayout from "./components/AuthLayout";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
@@ -9,42 +8,24 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Reservations from "./pages/Reservations.jsx";
 import ParkingSlots from "./pages/ParkingSlots.jsx";
 import Support from "./pages/Support.jsx";
-import AdminLogin from "./pages/AdminLogin.jsx";
 import Logout from "./pages/Logout.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminProfile from "./pages/AdminProfile.jsx";
+import AdminSupportTickets from "./pages/AdminSupportTickets.jsx";
 import Profile from "./pages/Profile.jsx";
 import AboutUs from "./pages/AboutUs";
 import FindParking from "./pages/FindParking.jsx";
 import ManageSlots from "./pages/ManageSlots.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
+import { useAuth } from "./context/AuthContext.jsx";
+
 function App() {
-  const location = useLocation();
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState("");
-  const [loading, setLoading] = useState(true); 
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const role = localStorage.getItem("userRole") || "";
-    
-    setIsLoggedIn(loggedIn);
-    setUserRole(role);
-    setLoading(false); 
-  }, [location]);
-
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-[#F8F8FA] font-bold text-[#8B1E3F]">
-        Loading ParkMate...
-      </div>
-    );
-  }
+  const { isLoggedIn, role } = useAuth();
 
   return (
     <div className="min-h-screen bg-[#F8F8FA]">
-      
+
       {!isLoggedIn ? (
         <>
           <Navbar />
@@ -52,38 +33,41 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/findparking" element={<FindParking />} />
-        
           </Routes>
         </>
       ) : (
-        <AuthLayout role={userRole}>
+        <AuthLayout role={role}>
           <Routes>
             <Route path="/logout" element={<Logout />} />
-            <Route path="/support" element={<Support />} />
-            {userRole === "user" && (
+
+            {role === "user" && (
               <>
+                {/* Users submit complaints to a specific venue's admin */}
+                <Route path="/support" element={<Support />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/reservations" element={<Reservations />} />
                 <Route path="/slots" element={<ParkingSlots />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/findparking" element={<FindParking />} />
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </>
             )}
 
-            {userRole === "admin" && (
+            {role === "admin" && (
               <>
+                <Route path="/support" element={<Support />} />
                 <Route path="/admindashboard" element={<AdminDashboard />} />
                 <Route path="/" element={<Navigate to="/admindashboard" replace />} />
                 <Route path="*" element={<Navigate to="/admindashboard" replace />} />
                 <Route path="/manageslots" element={<ManageSlots />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/users" element={<UsersPage />} />
-
+                <Route path="/admin-tickets" element={<AdminSupportTickets />} />
+                <Route path="/adminprofile" element={<AdminProfile />} />
               </>
             )}
           </Routes>

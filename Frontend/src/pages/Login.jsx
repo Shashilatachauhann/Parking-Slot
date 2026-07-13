@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+    const [role, setRole] = useState("user");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,33 +21,16 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                if (data.user.role !== 'user') {
-                    return setError("Access Denied! it's a user login page.");
-                }
-
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("username", data.user.name);
-                localStorage.setItem("userRole", data.user.role);
-
-                alert(`Welcome back, ${data.user.name}!`);
-                navigate("/dashboard");
-            } else {
-                setError(data.message || "Invalid credentials");
-            }
-        } catch (err) {
-            setError("Could not connect to the server. Please try again later.");
-        } finally {
-            setLoading(false);
+           const loggedInUser = await login(email, password, role);
+           navigate(loggedInUser.role ==="admin" ? "/admindashboard" : "/dashboard");
         }
+        catch(err){
+            setError(err.response?.data?.message || err.message || "Invalid Email or Password");
+        }
+        finally{
+           setLoading(false);
+        }
+
     };
 
     return (
@@ -55,11 +42,30 @@ export default function Login() {
                         <span className="border-[3px] border-[#550206] rounded-xl px-3 py-1 text-2xl font-bold text-[#550206]">P</span>
                         <div className="text-left">
                             <h1 className="text-2xl font-bold text-[#550206] leading-tight">ParkMate</h1>
-                            <p className="text-[11px] tracking-[4px] text-gray-500">USER LOGIN</p>
+                            <p className="text-[11px] tracking-[4px] text-gray-500">LOGIN</p>
                         </div>
                     </Link>
                 </div>
-
+                 <div className="flex bg-gray-100 rounded-2xl p-1.5 mb-6">
+                    <button
+                        type="button"
+                        onClick={() => setRole("user")}
+                        className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${
+                            role === "user" ? "bg-white text-[#8B1E3F] shadow-sm" : "text-gray-500"
+                        }`}
+                    >
+                        User
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setRole("admin")}
+                        className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${
+                            role === "admin" ? "bg-white text-[#8B1E3F] shadow-sm" : "text-gray-500"
+                        }`}
+                    >
+                        Admin
+                    </button>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
                         <label className="block mb-2 text-sm font-semibold text-gray-700">Email</label>
@@ -94,7 +100,7 @@ export default function Login() {
                 </form>
 
                 <p className="mt-8 text-center text-gray-500 font-medium">
-                    New here? <Link to="/signup" className="text-[#8B1E3F] hover:underline">Create an account</Link>
+                    Don't Have an Account? <Link to="/signup" className="text-[#8B1E3F] hover:underline">Create an account</Link>
                 </p>
             </div>
         </div>

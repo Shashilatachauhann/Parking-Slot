@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import HowItWorks from "../components/HowItWorks";
 import Footer from "../components/Footer";
 import CarBg from '../assets/CarBg.png';
 import threads from '../assets/threads.png';
+import api from "../api/axios";
 const features = [
   {
     icon: "🚗",
@@ -27,6 +29,18 @@ const features = [
 ];
 
 export default function Home() {
+  const [stats, setStats] = useState({ venues: 0, availableSlots: 0, bookingsToday: 0 });
+
+  useEffect(() => {
+    api.get("/stats/public").then(({ data }) => setStats(data)).catch(() => { });
+  }, []);
+
+  const statItems = [
+    { label: "Available Slots", value: stats.availableSlots },
+    { label: "System Locations", value: stats.venues },
+    { label: "Bookings Today", value: stats.bookingsToday },
+  ];
+
   return (
     <main className="min-h-screen font-sans overflow-hidden">
 
@@ -38,10 +52,10 @@ export default function Home() {
           <div className="absolute inset-0 bg-gray-950/70 backdrop-blur-[2px]"></div>
         </div>
 
-    
+
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 lg:py-28 grid lg:grid-cols-2 items-center gap-16">
 
-       
+
           <div className="text-white">
             <span className="inline-block px-4 py-1.5 rounded-full bg-[#8B1E3F]/50 text-white border border-[#8B1E3F] text-sm font-semibold tracking-wide mb-6">
               ✨ Smart Parking Platform
@@ -67,7 +81,7 @@ export default function Home() {
             </div>
           </div>
 
-    
+
           <div className="relative flex justify-center lg:justify-end">
             <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-4xl p-8 shadow-2xl border border-white/20">
               <div className="flex justify-between items-start mb-8">
@@ -85,10 +99,10 @@ export default function Home() {
               </div>
 
               <div className="space-y-4 text-white">
-                {['Available Slots: 24', 'System Locations: 8', 'Bookings Today: 56'].map((item, idx) => (
+                {statItems.map((item, idx) => (
                   <div key={idx} className="flex justify-between items-center py-3 border-b border-white/10">
-                    <span className="font-medium text-gray-200">{item.split(':')[0]}</span>
-                    <span className="font-bold text-xl text-[#FF4D6D]">{item.split(':')[1]}</span>
+                    <span className="font-medium text-gray-200">{item.label}</span>
+                    <span className="font-bold text-xl text-[#FF4D6D]">{item.value}</span>
                   </div>
                 ))}
                 <div className="flex justify-between items-center pt-3">

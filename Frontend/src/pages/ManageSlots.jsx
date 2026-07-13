@@ -1,39 +1,54 @@
 import { useState, useEffect } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Zap } from "lucide-react";
+import api from "../api/axios";
 
 export default function ManageSlots() {
   const [slots, setSlots] = useState([]);
+  const [venue, setVenue] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ slotNumber: "", venue:"", location:"", floor:"", price: "" });
+  const [formData, setFormData] = useState({ slotNumber: "", floor: "", pricePerHour: "", isEV: false });
+  const [error, setError] = useState("");
+
+  const loadSlots = () => {
+    api.get("/venues/mine").then(({ data }) => {
+      setVenue(data);
+      api.get(`/slots?venue=${data._id}`).then((res) => setSlots(res.data));
+    });
+  };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/slots')
-      .then(res => res.json())
-      .then(data => setSlots(data));
+    loadSlots();
   }, []);
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:5000/api/slots', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    const newSlot = await res.json();
-    setSlots([...slots, newSlot]);
-    setIsModalOpen(false);
-    setFormData({  slotNumber: "", venue: "", location: "", floor: "", price: "" });
+    setError("");
+    try {
+      const { data } = await api.post("/slots", formData);
+      setSlots([...slots, data]);
+      setIsModalOpen(false);
+      setFormData({ slotNumber: "", floor: "", pricePerHour: "", isEV: false });
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create slot");
+    }
   };
 
   const deleteSlot = async (id) => {
-    await fetch(`http://localhost:5000/api/slots/${id}`, { method: 'DELETE' });
-    setSlots(slots.filter(s => s.id !== id));
+    try {
+      await api.delete(`/slots/${id}`);
+      setSlots(slots.filter((s) => s._id !== id));
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to delete slot");
+    }
   };
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-black text-gray-900">Slot Inventory</h1>
+        <div>
+          <h1 className="text-3xl font-black text-gray-900">Slot Inventory</h1>
+          {venue && <p className="text-gray-500 mt-1">{venue.name} — {venue.location}</p>}
+        </div>
         <button onClick={() => setIsModalOpen(true)} className="bg-[#8B1E3F] text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-[#A61E4D]">
           <Plus size={20} /> Add New Slot
         </button>
@@ -45,8 +60,7 @@ export default function ManageSlots() {
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100">
               <th className="p-6 text-xs font-bold text-gray-400 uppercase">Slot Name</th>
-              <th className="p-6 text-xs font-bold text-gray-400 uppercase">Venue</th>
-              <th className="p-6 text-xs font-bold text-gray-400 uppercase">Location</th>
+              <th className="p-6 text-xs font-bold text-gray-400 uppercase">Floor</th>
               <th className="p-6 text-xs font-bold text-gray-400 uppercase">Rate</th>
               <th className="p-6 text-xs font-bold text-gray-400 uppercase">Status</th>
               <th className="p-6 text-xs font-bold text-gray-400 uppercase text-right">Actions</th>
@@ -54,11 +68,12 @@ export default function ManageSlots() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {slots.map((slot) => (
-               <tr key={slot.id} className="hover:bg-gray-50">
-                <td className="p-6 font-black text-gray-800">{slot.slotNumber}</td>
-                <td className="p-6 font-medium text-gray-600">{slot.venue}</td>
-                <td className="p-6 font-medium text-gray-600">{slot.location} {slot.floor ? `· ${slot.floor}` : ""}</td>
-                <td className="p-6 font-bold text-gray-700">₹{slot.price}</td>
+              <tr key={slot.id} className="hover:bg-gray-50">
+                <td className="p-6 font-black text-gray-800 flex items-center gap-2">
+                  {slot.slotNumber} {slot.isEV && <Zap size={16} className="text-green-600" />}
+                </td>
+                <td className="p-6 font-medium text-gray-600">{slot.floor}</td>
+                <td className="p-6 font-bold text-gray-700">₹{slot.pricePerHour}</td>
                 <td className="p-6">
                   <span className={`font-bold text-xs px-3 py-1 rounded-full ${slot.isBooked ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"}`}>
                     {slot.isBooked ? "Occupied" : "Available"}
@@ -88,18 +103,6 @@ export default function ManageSlots() {
                 onChange={(e) => setFormData({ ...formData, slotNumber: e.target.value })}
               />
               <input
-                required placeholder="Venue (e.g. Phoenix Palassio Mall)"
-                value={formData.venue}
-                className="w-full border-2 border-gray-100 p-4 rounded-xl outline-none focus:border-[#8B1E3F]"
-                onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-              />
-              <input
-                required placeholder="Location / Area (e.g. Hazratganj)"
-                value={formData.location}
-                className="w-full border-2 border-gray-100 p-4 rounded-xl outline-none focus:border-[#8B1E3F]"
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              />
-              <input
                 placeholder="Floor / Zone (e.g. Basement 1)"
                 value={formData.floor}
                 className="w-full border-2 border-gray-100 p-4 rounded-xl outline-none focus:border-[#8B1E3F]"
@@ -107,10 +110,19 @@ export default function ManageSlots() {
               />
               <input
                 type="number" required placeholder="Hourly Price (₹)"
-                value={formData.price}
+                value={formData.pricePerHour}
                 className="w-full border-2 border-gray-100 p-4 rounded-xl outline-none focus:border-[#8B1E3F]"
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, pricePerHour: e.target.value })}
               />
+              <label className="flex items-center gap-3 text-sm font-semibold text-gray-600 px-1">
+                <input
+                  type="checkbox"
+                  checked={formData.isEV}
+                  onChange={(e) => setFormData({ ...formData, isEV: e.target.checked })}
+                  className="w-4 h-4 accent-[#8B1E3F]"
+                />
+                <Zap size={16} /> EV Charging Slot
+              </label>
             </div>
             <div className="flex gap-3 mt-8">
               <button type="button" onClick={() => setIsModalOpen(false)} className="w-full py-3 rounded-xl font-bold bg-gray-100">Cancel</button>

@@ -1,36 +1,15 @@
-import { ChevronDown, Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 export default function Navbar() {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showLoginMenu, setShowLoginMenu] = useState(false);
-  const dropdownRef = useRef(null);
-
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   const guestLinks = [
     { label: "Home", to: "/" },
     { label: "Find Parkings", to: "/findparking" },
     { label: "About Us", to: "/aboutus" }
   ];
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowLoginMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#550206] shadow-sm shadow-[#410103] px-6 lg:px-10 py-4">
@@ -55,34 +34,18 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* login/logout */}
-        <div className="hidden md:block relative" ref={dropdownRef}>
-          {isLoggedIn ? (
-            <button onClick={handleLogout}
-              className="bg-red-50 text-red-600 px-6 py-2.5 rounded-xl font-semibold hover:bg-red-100 transition">
-              Logout
-            </button>
-          ) : (
-            <button onClick={() => setShowLoginMenu(!showLoginMenu)}
-              className="flex items-center gap-2 bg-[#8B1E3F] text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-[#6d1731] transition">
-              Login <ChevronDown size={18} />
-            </button>
-          )}
-
-          {showLoginMenu && !isLoggedIn && (
-            <div className="absolute right-0 mt-3 w-52 bg-white rounded-2xl shadow-xl border overflow-hidden">
-              <Link to="/login" className="block px-5 py-3 hover:bg-gray-100 transition">👤 User Login</Link>
-              <Link to="/admin-login" className="block px-5 py-3 hover:bg-gray-100 transition">👨🏻‍💻 Admin Login</Link>
-            </div>
-          )}
+        <div className="hidden md:block relative">
+          <Link to="/login"
+            className="flex items-center gap-2 bg-[#8B1E3F] text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-[#6d1731] transition">
+            Login
+          </Link>
         </div>
-             {/* responsive for mobile */}
         <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* mobile menu */}
+       {/* MOBILE MENU */}
       {menuOpen && (
         <div className="md:hidden mt-4 space-y-2 border-t pt-4">
           {guestLinks.map((link) => (
@@ -90,14 +53,7 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          {isLoggedIn ? (
-            <button onClick={handleLogout} className="block py-3 px-4 text-red-600 font-bold">Logout</button>
-          ) : (
-            <>
-              <Link to="/login" className="block py-3 px-4">👤 User Login</Link>
-              <Link to="/admin-login" className="block py-3 px-4">👨🏻‍💻 Admin Login</Link>
-            </>
-          )}
+          <Link to="/login" className="block py-3 px-4 font-bold text-[#8B1E3F]">Login</Link>
         </div>
       )}
     </nav>

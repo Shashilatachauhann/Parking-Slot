@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { LayoutDashboard, Package, Users, DollarSign } from 'lucide-react';
+import { LayoutDashboard, Package, Users, IndianRupee } from 'lucide-react';
+import api from "../api/axios";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({ revenue: 0, bookings: 0, users: 0, available: 0 });
   const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch real data from your backend
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statsRes = await fetch('http://localhost:5000/api/stats');
-        const statsData = await statsRes.json();
-        setStats(statsData);
-
-        const chartRes = await fetch('http://localhost:5000/api/bookings/chart-data');
-        const chartData = await chartRes.json();
-        setChartData(chartData);
+        const [statsRes, chartRes] = await Promise.all([
+          api.get("/stats/venue"),
+          api.get("/stats/venue/chart"),
+        ]);
+        setStats(statsRes.data);
+        setChartData(chartRes.data);
       } catch (err) {
         console.error("Backend connection failed:", err);
+      } finally{
+        setLoading(false);
       }
     };
     fetchData();
@@ -33,9 +35,9 @@ export default function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {[
-          { title: "Total Revenue", val: `₹${stats.revenue}`, icon: DollarSign },
+          { title: "Total Revenue", val: `₹${stats.revenue}`, icon: IndianRupee },
           { title: "Bookings", val: stats.bookings, icon: Package },
-          { title: "Active Users", val: stats.users, icon: Users },
+          { title: "Users", val: stats.users, icon: Users },
           { title: "Free Slots", val: stats.available, icon: LayoutDashboard },
         ].map((card, i) => (
           <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
@@ -46,24 +48,33 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Charts integrated with backend data */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white p-8 rounded-3xl border shadow-sm">
           <h3 className="text-lg font-black mb-6">Revenue Trend</h3>
+          {chartData.length === 0 ? (
+              <p className="text-gray-400 text-sm">Not enough booking data yet to show a trend.</p>
+          ) : (
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={chartData}>
               <Tooltip />
               <Area type="monotone" dataKey="revenue" stroke="#8B1E3F" fill="#8B1E3F" fillOpacity={0.1} />
             </AreaChart>
           </ResponsiveContainer>
+        )}
+          
         </div>
         <div className="bg-white p-8 rounded-3xl border shadow-sm">
           <h3 className="text-lg font-black mb-6">Booking Volume</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <Bar dataKey="bookings" fill="#2D3748" radius={[10, 10, 10, 10]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {chartData.length === 0 ? (
+            <p className="text-gray-400 text-sm">No bookings yet.</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <Bar dataKey="bookings" fill="#2D3748" radius={[10, 10, 10, 10]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
     </div>
