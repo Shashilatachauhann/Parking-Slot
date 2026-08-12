@@ -84,6 +84,9 @@ export default function Reservations() {
                 <h3 className="text-xl font-black">{res.venue?.name}</h3>
                 <p className="text-gray-500 font-bold mt-2">Slot: {res.slot?.slotNumber}</p>
                 <p className="text-gray-400 text-sm">{res.date} • {res.startHour}:00–{res.endHour}:00</p>
+                {res.vehicleNumber && (
+                  <p className="text-gray-400 text-sm mt-1">Vehicle: <span className="font-bold text-gray-600">{res.vehicleNumber}</span></p>
+                )}
               </div>
 
               <div className="flex flex-col items-end justify-between">

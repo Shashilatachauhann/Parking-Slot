@@ -1,4 +1,4 @@
-import {LayoutDashboard, CalendarDays, Car, User, LifeBuoy, LogOut, MessageSquare} from "lucide-react";
+import {LayoutDashboard, CalendarDays, Car, User, LifeBuoy, LogOut, MessageSquare, ScanLine} from "lucide-react";
 import { useNavigate, NavLink, Link } from "react-router-dom";
 
 export default function Sidebar({ open, role }) { 
@@ -20,6 +20,7 @@ export default function Sidebar({ open, role }) {
     { title: "Admin Dashboard", path: "/admindashboard", icon: <LayoutDashboard size={20}/> },
     { title: "Manage Slots", path: "/manageslots", icon: <Car size={20}/> },
     { title: "Bookings", path: "/bookings", icon: <CalendarDays size={20}/> },
+    { title: "Gate Control", path: "/admin/gate", icon: <ScanLine size={20}/> },
     { title: "Users", path: "/users", icon: <User size={20}/> },
     { title: "Support Tickets", path: "/admin-tickets", icon: <MessageSquare size={20}/> },
     { title: "Profile", path: "/adminprofile", icon: <LifeBuoy size={20}/> }

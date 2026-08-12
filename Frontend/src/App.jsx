@@ -18,6 +18,7 @@ import FindParking from "./pages/FindParking.jsx";
 import ManageSlots from "./pages/ManageSlots.jsx";
 import Bookings from "./pages/Bookings.jsx";
 import UsersPage from "./pages/UsersPage.jsx";
+import GateControl from "./pages/GateControl.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
                 <Route path="/manageslots" element={<ManageSlots />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/users" element={<UsersPage />} />
+                <Route path="/admin/gate" element={<GateControl />} />
                 <Route path="/admin-tickets" element={<AdminSupportTickets />} />
                 <Route path="/adminprofile" element={<AdminProfile />} />
               </>

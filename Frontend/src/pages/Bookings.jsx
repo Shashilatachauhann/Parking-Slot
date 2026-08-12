@@ -192,6 +192,9 @@ export default function Bookings() {
                   <p className="text-sm text-gray-500">
                     Slot: {b.slot?.slotNumber} • {b.date} • {b.startHour}:00–{b.endHour}:00 • ₹{b.finalPrice}
                   </p>
+                  {b.vehicleNumber && (
+                    <p className="text-xs text-gray-400 mt-0.5">Vehicle: <span className="font-bold text-gray-500">{b.vehicleNumber}</span></p>
+                  )}
                   {b.status === "Cancelled" && (
                     <p className="text-xs font-bold text-red-500 mt-1">
                       Cancelled by {b.cancelledBy === "user" ? "the user" : "admin"}

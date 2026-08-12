@@ -1,4 +1,5 @@
 const Venue = require("../models/Venue");
+const sendError = require("../utils/sendError");
 
 exports.getMyVenue = async (req, res) => {
   try {
@@ -8,7 +9,7 @@ exports.getMyVenue = async (req, res) => {
     }
     res.status(200).json(venue);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong", error: error.message });
+    sendError(res, 500, "Something went wrong", error);
   }
 };
 
@@ -29,8 +30,7 @@ exports.updateMyVenue = async (req, res) => {
 
     res.status(200).json({ message: "Venue updated successfully", venue });
   } catch (error) {
-    console.error("Update venue error:", error.message);
-    res.status(500).json({ message: "Something went wrong updating venue", error: error.message });
+    sendError(res, 500, "Something went wrong updating venue", error);
   }
 };
 
@@ -39,6 +39,6 @@ exports.getAllVenues = async (req, res) => {
     const venues = await Venue.find();
     res.status(200).json(venues);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching venues", error: error.message });
+    sendError(res, 500, "Something went wrong fetching venues", error);
   }
 };

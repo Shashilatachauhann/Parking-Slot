@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Venue = require("../models/Venue");
+const sendError = require("../utils/sendError");
 
 const generateToken = (userId) => {
     return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -62,8 +63,7 @@ exports.signup = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error("Signup error:", error.message);
-        res.status(500).json({ message: "Something went wrong during signup", error: error.message });
+        sendError(res, 500, "Something went wrong during signup", error);
     }
 };
 
@@ -97,8 +97,7 @@ exports.login = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error("Login error:", error.message);
-        res.status(500).json({ message: "Something went wrong during login", error: error.message });
+        sendError(res, 500, "Something went wrong during login", error);
     }
 };
   //CURRENT USER'S DATA
@@ -106,7 +105,7 @@ exports.getMe = async (req, res) => {
     try {
         res.status(200).json({ user: req.user });
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong", error: error.message });
+        sendError(res, 500, "Something went wrong", error);
     }
 };
  // EDIT THE PROFILE 
@@ -121,7 +120,6 @@ exports.updateMe = async (req, res) => {
 
         res.status(200).json({ message: "Profile updated successfully", user: req.user });
     } catch (error) {
-        console.error("Update profile error:", error.message);
-        res.status(500).json({ message: "Something went wrong updating profile", error: error.message });
+        sendError(res, 500, "Something went wrong updating profile", error);
     }
 };

@@ -1,6 +1,7 @@
 const Booking = require("../models/Booking");
 const Slot = require("../models/Slot");
 const Venue = require("../models/Venue");
+const sendError = require("../utils/sendError");
 
 exports.getPublicStats = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ exports.getPublicStats = async (req, res) => {
 
     res.status(200).json({ venues: venueCount, availableSlots, bookingsToday });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching stats", error: error.message });
+    sendError(res, 500, "Something went wrong fetching stats", error);
   }
 };
 
@@ -39,7 +40,7 @@ exports.getVenueStats = async (req, res) => {
       available: availableSlots,
     });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching venue stats", error: error.message });
+    sendError(res, 500, "Something went wrong fetching venue stats", error);
   }
 };
 
@@ -61,6 +62,6 @@ exports.getVenueChartData = async (req, res) => {
 
     res.status(200).json(chartData);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching chart data", error: error.message });
+    sendError(res, 500, "Something went wrong fetching chart data", error);
   }
 };

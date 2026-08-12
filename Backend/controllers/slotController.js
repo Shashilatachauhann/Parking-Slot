@@ -1,5 +1,6 @@
 const Slot = require("../models/Slot");
 const Booking = require("../models/Booking");
+const sendError = require("../utils/sendError");
 
 exports.getSlots = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ exports.getSlots = async (req, res) => {
 
     res.status(200).json(slots);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching slots", error: error.message });
+    sendError(res, 500, "Something went wrong fetching slots", error);
   }
 };
 
@@ -33,7 +34,7 @@ exports.getSlotAvailability = async (req, res) => {
 
     res.status(200).json(bookings);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong checking availability", error: error.message });
+    sendError(res, 500, "Something went wrong checking availability", error);
   }
 };
 
@@ -51,8 +52,7 @@ exports.createSlot = async (req, res) => {
 
     res.status(201).json(newSlot);
   } catch (error) {
-    console.error("Create slot error:", error.message);
-    res.status(500).json({ message: "Something went wrong creating slot", error: error.message });
+    sendError(res, 500, "Something went wrong creating slot", error);
   }
 };
 
@@ -76,8 +76,7 @@ exports.updateSlot = async (req, res) => {
     await slot.save();
     res.status(200).json(slot);
   } catch (error) {
-    console.error("Update slot error:", error.message);
-    res.status(500).json({ message: "Something went wrong updating slot", error: error.message });
+    sendError(res, 500, "Something went wrong updating slot", error);
   }
 };
 
@@ -94,7 +93,6 @@ exports.deleteSlot = async (req, res) => {
     await slot.deleteOne();
     res.status(200).json({ message: "Slot deleted successfully" });
   } catch (error) {
-    console.error("Delete slot error:", error.message);
-    res.status(500).json({ message: "Something went wrong deleting slot", error: error.message });
+    sendError(res, 500, "Something went wrong deleting slot", error);
   }
 };

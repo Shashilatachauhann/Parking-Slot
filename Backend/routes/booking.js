@@ -7,6 +7,9 @@ const {
   cancelBooking,
   updateBookingStatus,
   deleteBooking,
+  checkInBooking,
+  checkOutBooking,
+  getCurrentlyParked,
 } = require("../controllers/bookingController");
 const { protect, restrictTo } = require("../middleware/authMiddleware");
 
@@ -16,5 +19,9 @@ router.post("/", protect, createBooking);
 router.patch("/:id/cancel", protect, cancelBooking); 
 router.patch("/:id/status", protect, restrictTo("admin"), updateBookingStatus); 
 router.delete("/:id", protect, restrictTo("admin"), deleteBooking); 
+
+router.get("/venue/parked", protect, restrictTo("admin"), getCurrentlyParked);
+router.post("/checkin", protect, restrictTo("admin"), checkInBooking);
+router.patch("/:id/checkout", protect, restrictTo("admin"), checkOutBooking);
 
 module.exports = router;

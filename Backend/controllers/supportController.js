@@ -1,4 +1,5 @@
 const Support = require("../models/Support");
+const sendError = require("../utils/sendError");
 
 exports.createTicket = async (req, res) => {
   try {
@@ -17,8 +18,7 @@ exports.createTicket = async (req, res) => {
     });
      res.status(201).json(ticket);
   } catch (error) {
-    console.error("Create ticket error:", error.message);
-    res.status(500).json({ message: "Something went wrong sending your message", error: error.message });
+    sendError(res, 500, "Something went wrong sending your message", error);
   }
 };
 
@@ -28,7 +28,7 @@ exports.getMyTickets = async (req, res) => {
     const tickets = await Support.find({ sender: req.user._id }).sort({ createdAt: -1 });
     res.status(200).json(tickets);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching your tickets", error: error.message });
+    sendError(res, 500, "Something went wrong fetching your tickets", error);
   }
 };
 
@@ -43,7 +43,7 @@ exports.getVenueTickets = async (req, res) => {
 
     res.status(200).json(tickets);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching tickets", error: error.message });
+    sendError(res, 500, "Something went wrong fetching tickets", error);
   }
 };
 
@@ -55,7 +55,7 @@ exports.getPlatformTickets = async (req, res) => {
 
     res.status(200).json(tickets);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching tickets", error: error.message });
+    sendError(res, 500, "Something went wrong fetching tickets", error);
   }
 };
 
@@ -76,7 +76,6 @@ exports.updateTicketStatus = async (req, res) => {
 
     res.status(200).json(ticket);
   } catch (error) {
-    console.error("Update ticket error:", error.message);
-    res.status(500).json({ message: "Something went wrong updating the ticket", error: error.message });
+    sendError(res, 500, "Something went wrong updating the ticket", error);
   }
 };

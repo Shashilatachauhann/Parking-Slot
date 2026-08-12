@@ -1,5 +1,6 @@
 const Booking = require("../models/Booking");
 const User = require("../models/User");
+const sendError = require("../utils/sendError");
 
 exports.getVenueUsers = async (req, res) => {
   try {
@@ -9,6 +10,7 @@ exports.getVenueUsers = async (req, res) => {
 
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong fetching users", error: error.message });
+    sendError(res, 500, "Something went wrong fetching users", error);
   }
 };
+

@@ -13,6 +13,7 @@ export default function ParkingSlots() {
   const [date, setDate] = useState(todayStr());
   const [startHour, setStartHour] = useState(9);
   const [endHour, setEndHour] = useState(11);
+  const [vehicleNumber, setVehicleNumber] = useState("");
   const [occupied, setOccupied] = useState([]);
   const [error, setError] = useState("");
 
@@ -32,6 +33,7 @@ export default function ParkingSlots() {
     setDate(todayStr());
     setStartHour(9);
     setEndHour(11);
+    setVehicleNumber("");
     setBookingModal(slot);
     fetchOccupied(slot._id, todayStr());
   };
@@ -62,12 +64,17 @@ export default function ParkingSlots() {
 
   const confirmBooking = async () => {
     setError("");
+    if (!vehicleNumber.trim()) {
+      setError("Please enter your vehicle number.");
+      return;
+    }
     try {
       await api.post("/bookings", {
         slotId: bookingModal._id,
         date,
         startHour: Number(startHour),
         endHour: Number(endHour),
+        vehicleNumber: vehicleNumber.trim(),
       });
       alert(`✅ Slot ${bookingModal.slotNumber} successfully booked!`);
       setBookingModal(null);
@@ -163,6 +170,15 @@ export default function ParkingSlots() {
               </div>
             </div>
 
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Vehicle Number</label>
+            <input
+              type="text"
+              placeholder="e.g. UP32 AB 1234"
+              value={vehicleNumber}
+              onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
+              className="w-full border-2 border-gray-100 p-3 rounded-xl outline-none focus:border-[#8B1E3F] mb-4 uppercase"
+            />
+
             {occupied.length > 0 && (
               <div className="bg-red-50 border border-red-100 rounded-xl p-3 mb-3 text-sm text-red-600 font-semibold">
                 Already booked: {occupied.map((o, i) => (
@@ -196,3 +212,4 @@ export default function ParkingSlots() {
     </div>
   );
 }
+

@@ -58,6 +58,12 @@ const bookingSchema = new mongoose.Schema(
         qrCode: {
             type: String,
         },
+        vehicleNumber: {
+            type: String,
+            required: true,
+            trim: true,
+            uppercase: true,
+        },
         status: {
             type: String,
             enum: ["Active", "Completed", "Cancelled"],
@@ -66,6 +72,18 @@ const bookingSchema = new mongoose.Schema(
         cancelledBy: {
             type: String,
             enum: ["user", "admin", null],
+            default: null,
+        },
+        checkedIn: {
+            type: Boolean,
+            default: false,
+        },
+        checkInTime: {
+            type: Date,
+            default: null,
+        },
+        checkOutTime: {
+            type: Date,
             default: null,
         },
     },

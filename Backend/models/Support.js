@@ -35,4 +35,4 @@ const supportSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
-module.exports = mongoose.model("Supprot", supportSchema);
+module.exports = mongoose.model("Support", supportSchema);
